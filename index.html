@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NanopulseOS</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- v86 library via unpkg -->
+    <script src="https://unpkg.com/v86@latest/build/libv86.js"></script>
+</head>
+<body>
+    <header id="top-bar">
+        <div class="logo">root@nanopulseos:~$</div>
+        <nav>
+            <button class="nav-btn active" data-target="home-section">&gt; 01._HOME</button>
+            <button class="nav-btn" data-target="guide-section">&gt; 02._GUIDE</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Home Section -->
+        <section id="home-section" class="active-section">
+            <div class="intro">
+                <h1>NanopulseOS</h1>
+                <p>A lightweight hobby operating system designed for simplicity and learning.</p>
+                <a href="nanopulseos.iso" download class="action-btn download-btn">Download .iso</a>
+            </div>
+
+            <div id="emulator-wrapper">
+                <div class="emulator-header">
+                    <span>v86 Emulator - NanopulseOS</span>
+                    <div class="controls">
+                        <button id="start-emulator-btn" class="action-btn">Start</button>
+                        <button id="stop-emulator-btn" class="action-btn" style="display:none;">Stop</button>
+                    </div>
+                </div>
+                <div id="emulator-screen"></div>
+            </div>
+        </section>
+
+        <!-- Guide Section -->
+        <section id="guide-section">
+            <div class="docs">
+                <h2>Installation Guide</h2>
+                <p>Follow these steps to boot or flash NanopulseOS on a real machine.</p>
+
+                <h3>1. Download the ISO</h3>
+                <p>Get the latest <code>nanopulseos.iso</code> from the Home tab or the <a href="https://github.com/kryptoish/nanopulseOS/releases" target="_blank" style="color: var(--prompt-color);">GitHub Releases</a>.</p>
+
+                <h3>2. Prepare a USB Drive</h3>
+                <p>Insert a USB flash drive (minimum 4GB recommended). <strong>Warning: All data on this drive will be erased.</strong></p>
+
+                <h3>3. Flash the ISO</h3>
+                <div class="code-block">
+                    <div class="os-label">Linux / macOS (using dd)</div>
+                    <code>sudo dd if=nanopulseos.iso of=/dev/sdX bs=4M status=progress</code>
+                    <p class="note">Replace <code>/dev/sdX</code> with your actual USB drive identifier.</p>
+                </div>
+                <div class="code-block">
+                    <div class="os-label">Windows</div>
+                    <p>Use a tool like <a href="https://rufus.ie/" target="_blank" style="color: var(--prompt-color);">Rufus</a>. Select the ISO, choose your USB drive, and click start.</p>
+                </div>
+
+                <h3>4. Boot the OS</h3>
+                <ul>
+                    <li>Reboot your machine.</li>
+                    <li>Enter your BIOS/UEFI settings (usually by pressing F2, F12, DEL, or ESC during startup).</li>
+                    <li>Set the USB drive as the primary boot device.</li>
+                    <li>Save changes and exit. NanopulseOS should now boot.</li>
+                </ul>
+
+                <div class="section-footer">
+                    <span>EOF</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
