@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NanopulseOS</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
     <link rel="stylesheet" href="style.css">
     <!-- v86 library via unpkg -->
     <script src="https://unpkg.com/v86@latest/build/libv86.js"></script>
 </head>
 <body>
     <header id="top-bar">
-        <div class="logo">root@nanopulseos:~$</div>
+        <div class="logo">root@nanopulseos:~<span class="prompt-dollar">$</span></div>
         <nav>
             <button class="nav-btn active" data-target="home-section">&gt; 01._HOME</button>
             <button class="nav-btn" data-target="guide-section">&gt; 02._GUIDE</button>
@@ -21,8 +23,18 @@
         <!-- Home Section -->
         <section id="home-section" class="active-section">
             <div class="intro">
-                <h1>NanopulseOS</h1>
-                <p>A lightweight hobby operating system designed for simplicity and learning.</p>
+                <pre class="ascii-art">
+                                                                                       mmmmmmmmmmm mmmmmmmmmmm
+                                                                  dP                   MMP"""""YMM MP""""""`MM 
+                                                                  88                   M' .mmm. `M M  mmmmm..M 
+            88d888b. .d8888b. 88d888b. .d8888b. 88d888b. dP    dP 88 .d8888b. .d8888b. M  MMMMM  M M.      `YM 
+            88'  `88 88'  `88 88'  `88 88'  `88 88'  `88 88    88 88 Y8ooooo. 88ooood8 M  MMMMM  M MMMMMMM.  M 
+            88    88 88.  .88 88    88 88.  .88 88.  .88 88.  .88 88       88 88.  ... M. `MMM' .M M. .MMM'  M 
+            dP    dP `88888P8 dP    dP `88888P' 88Y888P' `88888P' dP `88888P' `88888P' MMb     dMM Mb.     .dM 
+                                                88                                     MMMMMMMMMMM MMMMMMMMMMM 
+                                                dP
+                </pre>
+                <p>A lightweight hobby operating system designed for learning.</p>
                 <a href="nanopulseos.iso" download class="action-btn download-btn">Download .iso</a>
             </div>
 

@@ -53,18 +53,17 @@ nav {
     cursor: pointer;
     font-family: inherit;
     font-size: 0.95rem;
-    transition: all 0.2s ease;
+    transition: color 0.2s ease;
 }
 
 .nav-btn:hover {
-    background-color: var(--hover-bg);
-    color: var(--text-color);
+    color: #ffffff;
 }
 
 .nav-btn.active {
-    background-color: #222222;
-    border: 1px solid var(--border-color);
-    color: var(--prompt-color);
+    background-color: var(--text-color);
+    border: 1px solid var(--text-color);
+    color: var(--bg-color);
 }
 
 /* Main Content */
@@ -92,12 +91,21 @@ section.active-section {
     margin-bottom: 40px;
 }
 
-.intro h1 {
+.prompt-dollar {
+    color: var(--prompt-color);
+}
+
+.ascii-art {
     margin-top: 0;
     color: var(--prompt-color);
     font-weight: 700;
-    font-size: 2rem;
-    letter-spacing: -0.5px;
+    font-size: 0.75rem;
+    line-height: 1.1;
+    text-align: left;
+    display: inline-block;
+    white-space: pre;
+    overflow-x: auto;
+    max-width: 100%;
 }
 
 .intro p {
