@@ -1,4 +1,23 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Favicon Switching Logic
+    const faviconTag = document.querySelector('link[rel="icon"]');
+    const appleTouchIconTag = document.querySelector('link[rel="apple-touch-icon"]');
+    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    function updateFavicon() {
+        if (darkModeMediaQuery.matches) {
+            faviconTag.href = 'favicon-dark.png';
+            appleTouchIconTag.href = 'favicon-dark.png';
+        } else {
+            faviconTag.href = 'favicon-light.png';
+            appleTouchIconTag.href = 'favicon-light.png';
+        }
+    }
+
+    // Initial check and listener for changes
+    updateFavicon();
+    darkModeMediaQuery.addEventListener('change', updateFavicon);
+
     const navBtns = document.querySelectorAll('.nav-btn');
     const sections = document.querySelectorAll('section');
     const startEmulatorBtn = document.getElementById('start-emulator-btn');
