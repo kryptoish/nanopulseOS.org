@@ -253,3 +253,52 @@ section.active-section {
     font-size: 0.85rem;
     letter-spacing: 2px;
 }
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    #top-bar {
+        flex-direction: column;
+        gap: 16px;
+        padding: 20px 15px;
+        text-align: center;
+    }
+
+    nav {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .nav-btn {
+        flex: 1;
+        text-align: center;
+        padding: 8px 10px;
+        font-size: 0.85rem;
+    }
+
+    .ascii-art {
+        font-size: 0.45rem;
+        line-height: 1;
+    }
+
+    .intro p {
+        font-size: 0.95rem;
+    }
+
+    #emulator-screen {
+        height: 300px;
+    }
+
+    .docs {
+        padding: 0 10px;
+    }
+
+    .code-block {
+        padding: 12px;
+    }
+
+    .code-block code {
+        font-size: 0.8rem;
+        overflow-x: auto;
+    }
+}
