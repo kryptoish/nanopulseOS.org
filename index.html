@@ -1,142 +1,425 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>nanopulseOS</title>
-    
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="nanopulseOS (npOS) is a lightweight hobby operating system designed for learning and exploration. Experience a custom-built kernel live in your browser with our integrated x86 emulator.">
-    <meta name="keywords" content="nanopulseos, nanopulse, npos, hobby os, operating system, learning, x86, emulator, v86, kernel development, osdev, low-level programming">
-    <meta name="author" content="NanoPulseOS Team">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://nanopulseos.org/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>nanopulseOS</title>
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://nanopulseos.org/">
-    <meta property="og:title" content="nanopulseOS | A Lightweight Hobby Operating System">
-    <meta property="og:description" content="Explore NanoPulseOS (npOS), a lightweight hobby OS built for learning. Try the live demo via v86 emulator or download the ISO to boot on real hardware.">
-    <meta property="og:image" content="https://nanopulseos.org/favicon-dark.png">
+<meta name="description" content="nanopulseOS is a tiny hobby operating system for x86 (i686), written in C and assembly. Boot it in your browser, or download the ISO and flash it to a USB stick.">
+<meta name="keywords" content="nanopulseos, nanopulse, npos, hobby os, operating system, osdev, x86, i686, kernel, v86, emulator, iso">
+<meta name="author" content="nanopulseOS">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://nanopulseos.org/">
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://nanopulseos.org/">
-    <meta property="twitter:title" content="nanopulseOS | A Lightweight Hobby Operating System">
-    <meta property="twitter:description" content="Explore NanoPulseOS (npOS), a lightweight hobby OS built for learning. Try the live demo via v86 emulator or download the ISO.">
-    <meta property="twitter:image" content="https://nanopulseos.org/favicon-dark.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://nanopulseos.org/">
+<meta property="og:title" content="nanopulseOS: a tiny hobby operating system">
+<meta property="og:description" content="A tiny x86 OS written in C and assembly. Boot it in your browser or flash the ISO to a USB stick.">
+<meta property="og:image" content="https://nanopulseos.org/favicon-dark.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nanopulseOS: a tiny hobby operating system">
+<meta name="twitter:description" content="A tiny x86 OS written in C and assembly. Boot it in your browser or flash the ISO to a USB stick.">
+<meta name="twitter:image" content="https://nanopulseos.org/favicon-dark.png">
 
-    <!-- Theme Color -->
-    <meta name="theme-color" content="#00ff41">
+<meta name="theme-color" content="#0d0d0c" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ebe7dc" media="(prefers-color-scheme: light)">
 
-    <!-- Structured Data (JSON-LD) -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "NanoPulseOS",
-      "operatingSystem": "x86",
-      "applicationCategory": "OperatingSystem",
-      "description": "A lightweight hobby operating system designed for learning and exploration.",
-      "url": "https://nanopulseos.org/",
-      "downloadUrl": "https://nanopulseos.org/nanopulseos.iso",
-      "softwareVersion": "1.0",
-      "offers": {
-        "@type": "Offer",
-        "price": "0.00",
-        "priceCurrency": "USD"
-      }
-    }
-    </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "nanopulseOS",
+  "operatingSystem": "x86 (i686)",
+  "applicationCategory": "OperatingSystem",
+  "description": "A tiny hobby operating system for x86, written in C and assembly.",
+  "url": "https://nanopulseos.org/",
+  "downloadUrl": "https://nanopulseos.org/nanopulseos.iso",
+  "license": "https://opensource.org/licenses/MIT",
+  "codeRepository": "https://github.com/kryptoish/nanopulseOS",
+  "offers": { "@type": "Offer", "price": "0.00", "priceCurrency": "USD" }
+}
+</script>
 
-    <link rel="icon" type="image/png" href="favicon-dark.png">
-    <link rel="apple-touch-icon" href="favicon-dark.png">
-    <link rel="stylesheet" href="style.css">
-    <!-- v86 library via unpkg -->
-    <script src="https://unpkg.com/v86@latest/build/libv86.js"></script>
+<link rel="icon" type="image/png" href="favicon-dark.png" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="favicon-light.png" media="(prefers-color-scheme: light)">
+<link rel="apple-touch-icon" href="favicon-dark.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600&display=swap">
+<link rel="stylesheet" href="style.css">
+
+<!-- apply saved theme before paint -->
+<script>try{var t=localStorage.getItem('npos-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 </head>
 <body>
-    <header id="top-bar">
-        <div class="logo">root@nanopulseos:~<span class="prompt-dollar">$</span></div>
-        <nav>
-            <button class="nav-btn active" data-target="home-section">&gt; 01._HOME</button>
-            <button class="nav-btn" data-target="guide-section">&gt; 02._GUIDE</button>
-        </nav>
-    </header>
+<div id="app">
 
-    <main>
-        <!-- Home Section -->
-        <section id="home-section" class="active-section">
-            <div class="intro">
-                <pre class="ascii-art" role="img" aria-label="NanoPulseOS ASCII Art Logo">
-                                                                             mmmmmmmmmmm mmmmmmmmmmm
-                                                        dP                   MMP"""""YMM MP""""""`MM 
-                                                        88                   M' .mmm. `M M  mmmmm..M 
-  88d888b. .d8888b. 88d888b. .d8888b. 88d888b. dP    dP 88 .d8888b. .d8888b. M  MMMMM  M M.      `YM 
-  88'  `88 88'  `88 88'  `88 88'  `88 88'  `88 88    88 88 Y8ooooo. 88ooood8 M  MMMMM  M MMMMMMM.  M 
-  88    88 88.  .88 88    88 88.  .88 88.  .88 88.  .88 88       88 88.  ... M. `MMM' .M M. .MMM'  M 
-  dP    dP `88888P8 dP    dP `88888P' 88Y888P' `88888P' dP `88888P' `88888P' MMb     dMM Mb.     .dM 
-                                      88                                     MMMMMMMMMMM MMMMMMMMMMM 
-                                      dP
-                </pre>
-                <p>A lightweight hobby operating system designed for learning.</p>
-                <a href="nanopulseos.iso" download class="action-btn download-btn">Download .iso</a>
-            </div>
+  <!-- ───────────────────────── system header ───────────────────────── -->
+  <header id="sys">
+    <div class="sys-col">
+      <div class="sys-field">SYS.NAME&nbsp;: <span>nanopulseOS</span></div>
+      <div class="sys-field">ARCH&nbsp;&nbsp;&nbsp;&nbsp;: <span>i686 / x86-32</span></div>
+      <div class="sys-field hide-sm">BOOT&nbsp;&nbsp;&nbsp;&nbsp;: <span>GRUB2 · multiboot2</span></div>
+    </div>
+    <div class="sys-col sys-right">
+      <div class="sys-field">RELEASE : <span id="sys-release">latest</span></div>
+      <div class="sys-field">IMAGE : <span id="sys-image">nanopulseos.iso</span></div>
+      <div class="sys-field hide-sm">SRC : <a href="https://github.com/kryptoish/nanopulseOS" target="_blank" rel="noopener">github.com/kryptoish/nanopulseOS</a></div>
+    </div>
+  </header>
 
-            <div id="emulator-wrapper">
-                <div class="emulator-header">
-                    <span>v86 Emulator - NanopulseOS</span>
-                    <div class="controls">
-                        <button id="start-emulator-btn" class="action-btn">Start</button>
-                        <button id="stop-emulator-btn" class="action-btn" style="display:none;">Stop</button>
-                    </div>
-                </div>
-                <div id="emulator-screen"></div>
-            </div>
+  <main id="out" tabindex="-1">
 
-            <div class="section-footer">
-                <span>EOF</span>
-            </div>
-        </section>
+    <!-- ───────────────────────── boot ───────────────────────── -->
+    <section id="page-boot" class="page" aria-hidden="true">
+      <div id="boot-log"></div>
+      <div class="boot-skip dim">press any key to skip</div>
+    </section>
 
-        <!-- Guide Section -->
-        <section id="guide-section">
-            <div class="docs">
-                <h2>Installation Guide</h2>
-                <p>Follow these steps to boot or flash NanopulseOS on a real machine.</p>
+    <!-- ───────────────────────── ~ (home) ───────────────────────── -->
+    <section id="page-home" class="page" data-path="~" data-title="home">
+      <div class="cmd"><span class="ps">$</span> cat /etc/motd</div>
 
-                <h3>1. Download the ISO</h3>
-                <p>Get the latest <code>nanopulseos.iso</code> from the Home tab or the <a href="https://github.com/kryptoish/nanopulseOS/releases" target="_blank" style="color: var(--prompt-color);">GitHub Releases</a>.</p>
+<pre class="wordmark" role="img" aria-label="nanopulseOS">                                                                           <span class="os">mmmmmmmmmmm mmmmmmmmmmm</span>
+                                                      dP                   <span class="os">MMP"""""YMM MP""""""`MM</span>
+                                                      88                   <span class="os">M' .mmm. `M M  mmmmm..M</span>
+88d888b. .d8888b. 88d888b. .d8888b. 88d888b. dP    dP 88 .d8888b. .d8888b. <span class="os">M  MMMMM  M M.      `YM</span>
+88'  `88 88'  `88 88'  `88 88'  `88 88'  `88 88    88 88 Y8ooooo. 88ooood8 <span class="os">M  MMMMM  M MMMMMMM.  M</span>
+88    88 88.  .88 88    88 88.  .88 88.  .88 88.  .88 88       88 88.  ... <span class="os">M. `MMM' .M M. .MMM'  M</span>
+dP    dP `88888P8 dP    dP `88888P' 88Y888P' `88888P' dP `88888P' `88888P' <span class="os">MMb     dMM Mb.     .dM</span>
+                                    88                                     <span class="os">MMMMMMMMMMM MMMMMMMMMMM</span>
+                                    dP</pre>
 
-                <h3>2. Prepare a USB Drive</h3>
-                <p>Insert a USB flash drive (minimum 4GB recommended). <strong>Warning: All data on this drive will be erased.</strong></p>
+      <div class="hero">
+        <pre class="molecule" id="molecule" aria-hidden="true"></pre>
+        <div class="hero-body">
+          <p class="lede">A tiny operating system with a pulse.</p>
+          <p class="dim">nanopulseOS is a hobby kernel for 32-bit x86, written from scratch in C and assembly. It boots from a USB stick, runs entirely in RAM, and leaves nothing behind when you power off. It comes with generative art, retro games and a small shell.</p>
 
-                <h3>3. Flash the ISO</h3>
-                <div class="code-block">
-                    <div class="os-label">Linux / macOS (using dd)</div>
-                    <code>sudo dd if=nanopulseos.iso of=/dev/sdX bs=4M status=progress</code>
-                    <p class="note">Replace <code>/dev/sdX</code> with your actual USB drive identifier.</p>
-                </div>
-                <div class="code-block">
-                    <div class="os-label">Windows</div>
-                    <p>Use a tool like <a href="https://rufus.ie/" target="_blank" style="color: var(--prompt-color);">Rufus</a>. Select the ISO, choose your USB drive, and click start.</p>
-                </div>
+          <div class="actions">
+            <button class="act act-primary" data-run="boot">
+              <span class="act-key">▶</span><span class="act-label">boot it in your browser</span><span class="act-cmd">boot</span>
+            </button>
+            <a class="act" href="nanopulseos.iso" download data-dl>
+              <span class="act-key">↓</span><span class="act-label">download nanopulseos.iso</span><span class="act-cmd" data-iso-size>wget</span>
+            </a>
+            <button class="act" data-run="cd install">
+              <span class="act-key">⌁</span><span class="act-label">flash it to a usb stick</span><span class="act-cmd">cd install</span>
+            </button>
+          </div>
+        </div>
+      </div>
 
-                <h3>4. Boot the OS</h3>
-                <ul>
-                    <li>Reboot your machine.</li>
-                    <li>Enter your BIOS/UEFI settings (usually by pressing F2, F12, DEL, or ESC during startup).</li>
-                    <li>Set the USB drive as the primary boot device.</li>
-                    <li>Save changes and exit. NanopulseOS should now boot.</li>
-                </ul>
+      <div class="cmd gap"><span class="ps">$</span> ls /bin</div>
+      <div class="bin-grid">
+        <div class="bin">
+          <div class="bin-name">art</div>
+          <div class="bin-desc">A generative piece seeded from your CPU's timestamp counter and the PIT, so every machine draws something different.</div>
+        </div>
+        <div class="bin">
+          <div class="bin-name">tetris</div>
+          <div class="bin-desc">Falling blocks drawn straight to the framebuffer. Clearing lines earns you coins.</div>
+        </div>
+        <div class="bin">
+          <div class="bin-name">portal</div>
+          <div class="bin-desc">Plays <em>Still Alive</em> on the PC speaker while the lyrics type out next to ASCII art.</div>
+        </div>
+        <div class="bin">
+          <div class="bin-name">gamble</div>
+          <div class="bin-desc">Spend tetris coins on cases of error-message skins, from common to legendary.</div>
+        </div>
+        <div class="bin">
+          <div class="bin-name">ramfs</div>
+          <div class="bin-desc">A 256&nbsp;KB in-memory filesystem with 64 inodes: <code>ls</code> <code>mkdir</code> <code>cat</code> <code>write</code> <code>rm</code> <code>df</code>.</div>
+        </div>
+        <div class="bin wip">
+          <div class="bin-name">eso <span class="tag">wip</span></div>
+          <div class="bin-desc">A custom esoteric programming language with its own IDE. Not in the image yet.</div>
+        </div>
+      </div>
 
-                <div class="section-footer">
-                    <span>EOF</span>
-                </div>
-            </div>
-        </section>
-    </main>
+      <div class="cmd gap"><span class="ps">$</span> uname -a</div>
+      <dl class="kv">
+        <dt>kernel</dt><dd>freestanding C + x86 assembly</dd>
+        <dt>arch</dt><dd>i686 (x86-32), legacy BIOS</dd>
+        <dt>boot</dt><dd>GRUB 2, multiboot2</dd>
+        <dt>display</dt><dd>linear framebuffer, 32-bit colour</dd>
+        <dt>input</dt><dd>PS/2 keyboard, interrupt-driven</dd>
+        <dt>timer</dt><dd>PIT at 100 Hz</dd>
+        <dt>storage</dt><dd>ramfs only, never touches your disk</dd>
+        <dt>license</dt><dd>MIT</dd>
+      </dl>
+      <div class="eof">EOF</div>
+    </section>
 
-    <script src="script.js"></script>
+    <!-- ───────────────────────── ~/run (emulator) ───────────────────────── -->
+    <section id="page-run" class="page" data-path="~/run" data-title="run">
+      <div class="cmd"><span class="ps">$</span> qemu-system-i386 -cdrom nanopulseos.iso <span class="dim">&nbsp;# well, v86 in your browser</span></div>
+
+      <div class="emu-layout">
+        <div class="emu">
+          <div class="emu-bar">
+            <span class="emu-title"><span class="led" id="emu-led"></span><span id="emu-state">halted</span></span>
+            <span class="emu-ctl">
+              <button class="ctl" id="emu-boot" data-run="boot">boot</button>
+              <button class="ctl" id="emu-reset" data-run="reboot" disabled>reset</button>
+              <button class="ctl" id="emu-full" data-run="fullscreen" disabled>full</button>
+              <button class="ctl" id="emu-halt" data-run="halt" disabled>halt</button>
+            </span>
+          </div>
+          <div class="emu-screen" id="emu-screen">
+            <div id="emu-vt"></div>
+            <canvas></canvas>
+            <button class="emu-idle" id="emu-idle" data-run="boot">
+              <span class="idle-glyph" aria-hidden="true">▶</span>
+              <span class="idle-main">click or press <kbd>enter</kbd> to boot</span>
+              <span class="dim small" id="emu-idle-note">downloads a 16 MB image · i686 · 32 MB RAM</span>
+            </button>
+          </div>
+          <div class="emu-foot">
+            <span id="emu-kbd" class="dim">keyboard: <span>site shell</span></span>
+            <span id="emu-progress" class="dim"></span>
+          </div>
+        </div>
+
+        <aside class="emu-side">
+          <div class="side-h">// once it boots</div>
+          <ol class="steps-mini">
+            <li>Click the screen so your keyboard goes to the guest.</li>
+            <li>GRUB waits 3&nbsp;s, then the kernel starts.</li>
+            <li>Type <code>help</code> at the <code>&gt;</code> prompt.</li>
+            <li>Click outside the screen to get your keyboard back.</li>
+          </ol>
+          <div class="side-h">// try</div>
+          <dl class="kv kv-tight">
+            <dt>tetris</dt><dd>earn coins</dd>
+            <dt>art</dt><dd>generative fingerprint</dd>
+            <dt>portal</dt><dd>turn your sound on</dd>
+            <dt>gamble</dt><dd>spend coins</dd>
+            <dt>ls /</dt><dd>browse the ramfs</dd>
+          </dl>
+          <p class="dim small">Ctrl+C or Esc leaves a program. Everything lives in emulated RAM and is gone on reset.</p>
+        </aside>
+      </div>
+      <div class="eof">EOF</div>
+    </section>
+
+    <!-- ───────────────────────── ~/install ───────────────────────── -->
+    <section id="page-install" class="page" data-path="~/install" data-title="install">
+      <div class="cmd"><span class="ps">$</span> cat INSTALL.md</div>
+
+      <p class="dim measure">nanopulseOS runs from a USB stick, and nothing is installed on the machine. Flashing takes about a minute.</p>
+
+      <ol class="steps">
+        <li>
+          <div class="step-h"><span class="step-n">00</span> what you need</div>
+          <ul class="ticks">
+            <li>a 32- or 64-bit x86 PC that can do <b>legacy BIOS</b> boot (often called <b>CSM</b>)</li>
+            <li>any USB stick. The image is about 16&nbsp;MB, but <span class="warn">everything on the stick will be erased</span></li>
+            <li>Secure Boot turned off</li>
+          </ul>
+        </li>
+
+        <li>
+          <div class="step-h"><span class="step-n">01</span> download the image</div>
+          <div class="row">
+            <a class="act act-primary act-inline" href="nanopulseos.iso" download data-dl>
+              <span class="act-key">↓</span><span class="act-label">nanopulseos.iso</span><span class="act-cmd" data-iso-size>.iso</span>
+            </a>
+          </div>
+          <div class="code"><code>curl -LO https://nanopulseos.org/nanopulseos.iso</code><button class="copy" aria-label="copy">copy</button></div>
+          <p class="dim small">To check the file, type <a href="#" data-run="sha256sum nanopulseos.iso">sha256sum nanopulseos.iso</a> in the shell at the bottom and compare it with yours.</p>
+        </li>
+
+        <li>
+          <div class="step-h"><span class="step-n">02</span> flash it</div>
+          <div class="tabs" role="tablist">
+            <button class="tab" role="tab" data-tab="linux" aria-selected="true">linux</button>
+            <button class="tab" role="tab" data-tab="macos" aria-selected="false">macos</button>
+            <button class="tab" role="tab" data-tab="windows" aria-selected="false">windows</button>
+          </div>
+
+          <div class="tab-pane" data-pane="linux">
+            <p class="dim small"># find your stick (e.g. /dev/sdb). Pick the whole disk, not a partition.</p>
+            <div class="code"><code>lsblk -d -o NAME,SIZE,MODEL</code><button class="copy" aria-label="copy">copy</button></div>
+            <div class="code"><code>sudo dd if=nanopulseos.iso of=/dev/sdX bs=4M status=progress oflag=sync</code><button class="copy" aria-label="copy">copy</button></div>
+            <p class="dim small"># replace <code>/dev/sdX</code>. Choosing the wrong disk will wipe it.</p>
+          </div>
+
+          <div class="tab-pane" data-pane="macos" hidden>
+            <p class="dim small"># find your stick (e.g. /dev/disk4), then unmount it</p>
+            <div class="code"><code>diskutil list external</code><button class="copy" aria-label="copy">copy</button></div>
+            <div class="code"><code>diskutil unmountDisk /dev/diskN</code><button class="copy" aria-label="copy">copy</button></div>
+            <div class="code"><code>sudo dd if=nanopulseos.iso of=/dev/rdiskN bs=4m</code><button class="copy" aria-label="copy">copy</button></div>
+            <p class="dim small"># <code>rdisk</code> (raw disk) is much faster than <code>disk</code>. Eject when done.</p>
+          </div>
+
+          <div class="tab-pane" data-pane="windows" hidden>
+            <p class="dim small"># use <a href="https://rufus.ie/" target="_blank" rel="noopener">Rufus</a></p>
+            <dl class="kv kv-tight">
+              <dt>boot selection</dt><dd>nanopulseos.iso</dd>
+              <dt>partition scheme</dt><dd>MBR</dd>
+              <dt>target system</dt><dd>BIOS (or UEFI-CSM)</dd>
+              <dt>on START</dt><dd>choose <b>Write in DD Image mode</b></dd>
+            </dl>
+            <p class="dim small"># <a href="https://etcher.balena.io/" target="_blank" rel="noopener">balenaEtcher</a> also works on any OS: select the image, pick the stick, flash.</p>
+          </div>
+        </li>
+
+        <li>
+          <div class="step-h"><span class="step-n">03</span> boot it</div>
+          <ul class="ticks">
+            <li>Plug in the stick and reboot.</li>
+            <li>Open the firmware menu, usually <kbd>F2</kbd> <kbd>F12</kbd> <kbd>Del</kbd> or <kbd>Esc</kbd> during POST.</li>
+            <li>Turn on <b>Legacy / CSM</b> and turn off <b>Secure Boot</b>.</li>
+            <li>Pick the USB stick from the boot menu. GRUB shows up, waits 3&nbsp;s, then loads the kernel.</li>
+            <li>Type <code>help</code> at the <code>&gt;</code> prompt.</li>
+          </ul>
+        </li>
+
+        <li>
+          <div class="step-h"><span class="step-n">04</span> if it won't boot</div>
+          <dl class="kv kv-wide">
+            <dt>skips the usb</dt><dd>Your machine is probably UEFI-only. Many PCs made after about 2020 have no CSM, and nanopulseOS needs legacy BIOS boot.</dd>
+            <dt>black screen</dt><dd>Try another USB port, or turn on CSM / "legacy option ROMs" for the graphics card.</dd>
+            <dt>no keyboard</dt><dd>The kernel talks to PS/2. Most laptops emulate it, but some USB keyboards need "USB legacy support" turned on in the firmware.</dd>
+            <dt>no hardware?</dt><dd><code>qemu-system-i386 -cdrom nanopulseos.iso</code>, or just <a href="#" data-run="boot">boot it here</a>.</dd>
+          </dl>
+        </li>
+      </ol>
+      <div class="eof">EOF</div>
+    </section>
+
+    <!-- ───────────────────────── ~/man ───────────────────────── -->
+    <section id="page-man" class="page" data-path="~/man" data-title="man">
+      <div class="cmd"><span class="ps">$</span> man nanopulseos</div>
+
+      <div class="man-head"><span>NANOPULSEOS(1)</span><span class="hide-sm">nanopulseOS manual</span><span>NANOPULSEOS(1)</span></div>
+
+      <div class="man-sec">NAME</div>
+      <div class="man-body">nanopulseos: the guest shell you get after boot</div>
+
+      <div class="man-sec">SYNOPSIS</div>
+      <div class="man-body"><code>&gt; command [args]</code>. Commands are case-insensitive. Paths are absolute and start at <code>/</code>.</div>
+
+      <div class="man-sec">FILESYSTEM</div>
+      <dl class="kv kv-man">
+        <dt>ls [path]</dt><dd>list a directory (default <code>/</code>)</dd>
+        <dt>mkdir &lt;path&gt;</dt><dd>create a directory</dd>
+        <dt>rmdir &lt;path&gt;</dt><dd>remove an empty directory</dd>
+        <dt>touch &lt;path&gt;</dt><dd>create an empty file</dd>
+        <dt>rm &lt;path&gt;</dt><dd>delete a file</dd>
+        <dt>cat &lt;path&gt;</dt><dd>print a file</dd>
+        <dt>write &lt;path&gt; &lt;txt&gt;</dt><dd>overwrite a file with text</dd>
+        <dt>stat &lt;path&gt;</dt><dd>show file or directory info</dd>
+        <dt>df</dt><dd>show block and inode usage</dd>
+      </dl>
+
+      <div class="man-sec">PROGRAMS</div>
+      <dl class="kv kv-man">
+        <dt>art</dt><dd>generative fingerprint (Ctrl+C / Esc to exit)</dd>
+        <dt>tetris</dt><dd>play tetris and earn coins (Ctrl+C to exit)</dd>
+        <dt>portal</dt><dd>"Still Alive" on the PC speaker (Ctrl+C to exit)</dd>
+        <dt>gamble</dt><dd>open cases of error-message skins with your coins</dd>
+        <dt>inventory [recent]</dt><dd>list your skins, sorted by rarity or by most recent</dd>
+      </dl>
+
+      <div class="man-sec">MISC</div>
+      <dl class="kv kv-man">
+        <dt>echo &lt;text&gt;</dt><dd>print text</dd>
+        <dt>clear</dt><dd>clear the screen</dd>
+        <dt>help</dt><dd>list all commands</dd>
+      </dl>
+
+      <div class="man-sec">BUILDING</div>
+      <div class="man-body">
+        <p>You need an <code>i686-elf</code> GCC cross-compiler, <code>nasm</code>, <code>grub</code>, <code>xorriso</code> and <code>mtools</code>. The full walkthrough is in <a href="https://github.com/kryptoish/nanopulseOS/blob/main/docs/build-instructions.md" target="_blank" rel="noopener">docs/build-instructions.md</a>.</p>
+        <div class="code"><code>git clone https://github.com/kryptoish/nanopulseOS &amp;&amp; cd nanopulseOS</code><button class="copy" aria-label="copy">copy</button></div>
+        <div class="code"><code>./iso.sh &amp;&amp; qemu-system-i386 -cdrom nanopulseos.iso</code><button class="copy" aria-label="copy">copy</button></div>
+      </div>
+
+      <div class="man-sec">SEE ALSO</div>
+      <div class="man-body"><a href="#" data-run="cd install">install(7)</a>, <a href="#" data-run="cd run">run(1)</a>, <a href="https://wiki.osdev.org/" target="_blank" rel="noopener">osdev.org</a></div>
+      <div class="eof">EOF</div>
+    </section>
+
+    <!-- ───────────────────────── ~/about ───────────────────────── -->
+    <section id="page-about" class="page" data-path="~/about" data-title="about">
+      <div class="cmd"><span class="ps">$</span> cat README.md</div>
+
+      <div class="about">
+        <p class="lede">A NANO programmed OS that has Pulse.</p>
+        <p class="dim measure">nanopulseOS is a learning project: a minimal, flat, text-first operating system in the spirit of older machines. It boots from a USB stick and makes room for things that are just fun, like generative art, small games and easter eggs.</p>
+
+        <div class="side-h">// goals</div>
+        <ol class="goals">
+          <li>minimalist design</li>
+          <li>generative art</li>
+          <li>custom language interpreter <span class="tag">wip</span></li>
+          <li>retro game creation</li>
+          <li>wide x86 laptop compatibility</li>
+        </ol>
+
+        <div class="side-h">// roadmap</div>
+        <dl class="kv kv-wide">
+          <dt>own toolchain</dt><dd>replace GRUB, C and GCC with a custom bootloader, language and compiler. A long way off.</dd>
+          <dt>more games</dt><dd>more retro games and interactive challenges</dd>
+          <dt>scripting</dt><dd>make the esoteric language capable enough for real programs</dd>
+          <dt>performance</dt><dd>run smoothly on more hardware</dd>
+          <dt>artifact</dt><dd>??? <a href="#" data-run="cat .plan" class="dim">cat .plan</a></dd>
+        </dl>
+
+        <div class="side-h">// contribute</div>
+        <p class="dim measure">Fork the repo and open a pull request. Fixes to the code and new features are both welcome.</p>
+        <div class="row">
+          <a class="act act-inline" href="https://github.com/kryptoish/nanopulseOS" target="_blank" rel="noopener"><span class="act-key">↗</span><span class="act-label">kryptoish/nanopulseOS</span><span class="act-cmd">git clone</span></a>
+        </div>
+        <div id="gitlog" class="gitlog"></div>
+      </div>
+      <div class="eof">EOF</div>
+    </section>
+
+    <noscript>
+      <p>This site works best with JavaScript. Without it: <a href="nanopulseos.iso">download nanopulseos.iso</a>, then flash it with <code>sudo dd if=nanopulseos.iso of=/dev/sdX bs=4M</code> and boot in legacy BIOS mode.</p>
+      <style>.page{display:block!important}#page-boot,#page-run,#prompt,#status{display:none!important}</style>
+    </noscript>
+  </main>
+
+  <!-- ───────────────────────── shell response ───────────────────────── -->
+  <div id="term" aria-live="polite" hidden>
+    <div class="term-head">
+      <span class="dim">── stdout</span>
+      <button class="term-x" id="term-x" aria-label="close output">esc ✕</button>
+    </div>
+    <div class="term-body" id="term-body"></div>
+  </div>
+
+  <!-- ───────────────────────── prompt ───────────────────────── -->
+  <form id="prompt" autocomplete="off">
+    <label for="cmd" class="ps-label"><span class="ps-host"><span class="ps-user">guest@nanopulse</span>:</span><span id="ps-path">~</span>$</label>
+    <div class="cmd-wrap">
+      <input id="cmd" type="text" spellcheck="false" autocapitalize="off" autocorrect="off" enterkeyhint="go" aria-label="shell command">
+      <span class="ghost" id="ghost" aria-hidden="true"></span>
+    </div>
+  </form>
+
+  <!-- ───────────────────────── status line ───────────────────────── -->
+  <nav id="status" aria-label="sections">
+    <span class="tmux-sess">[npos]</span>
+    <div class="win-list" id="win-list">
+      <button class="win" data-page="home"><span class="win-i">1</span>:home</button>
+      <button class="win" data-page="run"><span class="win-i">2</span>:run</button>
+      <button class="win" data-page="install"><span class="win-i">3</span>:install</button>
+      <button class="win" data-page="man"><span class="win-i">4</span>:man</button>
+      <button class="win" data-page="about"><span class="win-i">5</span>:about</button>
+    </div>
+    <span class="status-r">
+      <span class="hide-sm">emu <span id="st-emu">○ halted</span> │ </span><span id="st-clock">--:--</span>
+    </span>
+  </nav>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
