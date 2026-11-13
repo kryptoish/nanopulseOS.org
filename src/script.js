@@ -174,7 +174,7 @@ const emu = (() => {
     if (window.V86) return Promise.resolve();
     return libPromise ||= new Promise((res, rej) => {
       const s = document.createElement('script');
-      s.src = 'libv86.js';
+      s.src = 'emulator/libv86.js';
       s.onload = res;
       s.onerror = () => { libPromise = null; rej(new Error('could not load libv86.js')); };
       document.head.appendChild(s);
@@ -193,12 +193,12 @@ const emu = (() => {
       return '<span class="e">boot: ' + esc(e.message) + '</span>';
     }
     v86 = new window.V86({
-      wasm_path: 'v86.wasm',
+      wasm_path: 'emulator/v86.wasm',
       memory_size: 32 * 1024 * 1024,
       vga_memory_size: 2 * 1024 * 1024,
       screen_container: screen,
-      bios: { url: 'seabios.bin' },
-      vga_bios: { url: 'vgabios.bin' },
+      bios: { url: 'emulator/bios/seabios.bin' },
+      vga_bios: { url: 'emulator/bios/vgabios.bin' },
       cdrom: { url: ISO },
       disable_mouse: true,
       autostart: true,
