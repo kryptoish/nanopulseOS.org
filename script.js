@@ -31,8 +31,8 @@ const fmtDate = d => d ? new Date(d).toISOString().slice(0, 10) : '?';
 
 /* ── pages ─────────────────────────────────────────────────── */
 
-const PAGES = ['home', 'run', 'install', 'man', 'about'];
-const PAGE_DIR = { home: HOME, run: HOME + '/run', install: HOME + '/install', man: HOME + '/man', about: HOME + '/about' };
+const PAGES = ['home', 'run', 'install', 'man'];
+const PAGE_DIR = { home: HOME, run: HOME + '/run', install: HOME + '/install', man: HOME + '/man' };
 let page = null;
 let cwd = HOME;
 
@@ -55,7 +55,6 @@ function go(name, { push = true, keepCwd = false } = {}) {
   document.title = name === 'home' ? 'nanopulseOS' : name + ' · nanopulseOS';
   const url = name === 'home' ? location.pathname + location.search : '#' + name;
   if (push && (location.hash.slice(1) || 'home') !== name) history.pushState(null, '', url);
-  if (name === 'about') loadGitLog();
   if (name !== 'run') emu.release();
 }
 addEventListener('popstate', () => go(pageFromHash(), { push: false }));
@@ -337,7 +336,6 @@ const FS = dir({
       run: dir({}, 'run'),
       install: dir({}, 'install'),
       man: dir({}, 'man'),
-      about: dir({}, 'about'),
       'README.md': file(`<span class="a"># nanopulseOS</span>
 A NANO programmed OS that has Pulse.
 
@@ -419,12 +417,12 @@ const def = (names, desc, fn, usage = '') => {
 
 def('help', 'list commands', () => {
   const rows = [
-    ['navigate', [['ls [-la] [path]', 'list a directory'], ['cd <dir>', 'go to a section: run install man about'], ['pwd', 'print the working directory'], ['cat <file>', 'print a file (try README.md)'], ['tree', 'show the whole site'], ['open <x>', 'open a section or link']]],
+    ['navigate', [['ls [-la] [path]', 'list a directory'], ['cd <dir>', 'go to a section: run install man'], ['pwd', 'print the working directory'], ['cat <file>', 'print a file (try README.md)'], ['tree', 'show the whole site'], ['open <x>', 'open a section or link']]],
     ['nanopulseOS', [['boot', 'start nanopulseOS in the emulator'], ['reboot / halt', 'reset or stop the emulator'], ['fullscreen', 'make the emulator fullscreen'], ['wget', 'download nanopulseos.iso'], ['sha256sum <iso>', 'hash the image in your browser'], ['git log', 'recent kernel commits']]],
     ['system', [['uname -a', 'kernel info'], ['neofetch', 'system summary'], ['theme [light|dark|auto]', 'switch colours'], ['history', 'commands you have run'], ['man <cmd>', 'help for one command'], ['clear', 'clear this output']]],
   ];
   return rows.map(([h, items]) => `<span class="d">// ${h}</span>\n` + items.map(([c, d]) => '  <span class="a">' + esc(c.padEnd(26)) + '</span><span class="d">' + d + '</span>').join('\n')).join('\n\n')
-    + '\n\n<span class="d">keys: tab completes · ↑↓ history · ←→ or 1–5 switch sections · esc closes this</span>';
+    + '\n\n<span class="d">keys: tab completes · ↑↓ history · ←→ or 1–4 switch sections · esc closes this</span>';
 });
 
 def(['ls', 'dir'], 'list directory contents', args => {
@@ -710,7 +708,7 @@ const term = (() => {
 const form = $('#prompt');
 const input = $('#cmd');
 const ghost = $('#ghost');
-input.placeholder = finePointer ? 'type help · tab completes · 1–5 switch sections' : 'type a command (try help)';
+input.placeholder = finePointer ? 'type help · tab completes · 1–4 switch sections' : 'type a command (try help)';
 
 function candidates(val) {
   const parts = val.split(/\s+/);
@@ -784,7 +782,7 @@ input.addEventListener('keydown', e => {
     const i = PAGES.indexOf(page);
     if (e.key === 'ArrowLeft') { e.preventDefault(); go(PAGES[(i + PAGES.length - 1) % PAGES.length]); return; }
     if (e.key === 'ArrowRight') { e.preventDefault(); go(PAGES[(i + 1) % PAGES.length]); return; }
-    if (/^[1-5]$/.test(e.key) && !e.ctrlKey && !e.metaKey && !e.altKey) { e.preventDefault(); go(PAGES[+e.key - 1]); return; }
+    if (/^[1-4]$/.test(e.key) && !e.ctrlKey && !e.metaKey && !e.altKey) { e.preventDefault(); go(PAGES[+e.key - 1]); return; }
     if (e.key === 'Enter' && page === 'run' && emu.state === 'halted') { e.preventDefault(); exec('boot', { echo: false }); return; }
   }
   if (e.key === 'Escape') { e.preventDefault(); if (input.value) input.value = ''; else term.hide(); updateGhost(); return; }
@@ -813,7 +811,7 @@ document.addEventListener('keydown', e => {
   if (e.ctrlKey || e.metaKey || e.altKey) return;
   if (e.key === 'Enter' && page === 'run' && emu.state === 'halted' && (t === document.body || t === out)) { exec('boot', { echo: false }); return; }
   if (e.key.length === 1 && e.key !== ' ' || e.key === 'ArrowUp' || e.key === 'Tab' && t === document.body) {
-    if (/^[1-5]$/.test(e.key) && !input.value) { go(PAGES[+e.key - 1]); e.preventDefault(); return; }
+    if (/^[1-4]$/.test(e.key) && !input.value) { go(PAGES[+e.key - 1]); e.preventDefault(); return; }
     input.focus({ preventScroll: true });
   }
 });
@@ -826,16 +824,7 @@ document.addEventListener('click', e => {
   exec(el.dataset.run, { echo: true });
 });
 
-/* ── install page: tabs + copy ─────────────────────────────── */
-
-const tabs = $$('.tab');
-function selectTab(name) {
-  tabs.forEach(t => t.setAttribute('aria-selected', String(t.dataset.tab === name)));
-  $$('.tab-pane').forEach(p => { p.hidden = p.dataset.pane !== name; });
-}
-tabs.forEach(t => t.addEventListener('click', () => selectTab(t.dataset.tab)));
-const ua = navigator.userAgent;
-selectTab(/Mac/.test(ua) && !/iPhone|iPad/.test(ua) ? 'macos' : /Win/.test(ua) ? 'windows' : 'linux');
+/* ── install page: copy buttons ─────────────────────────────── */
 
 $$('.copy').forEach(b => b.addEventListener('click', async () => {
   const text = b.previousElementSibling.textContent;
@@ -863,17 +852,6 @@ async function getCommits() {
     meta.commits = j.map(c => ({ sha: c.sha.slice(0, 7), url: c.html_url, date: fmtDate(c.commit.author.date), msg: c.commit.message.split('\n')[0].slice(0, 90) }));
   } catch { return null; }
   return meta.commits;
-}
-
-let gitLoaded = false;
-async function loadGitLog() {
-  if (gitLoaded) return;
-  gitLoaded = true;
-  const el = $('#gitlog');
-  const cs = await getCommits();
-  if (!cs) { el.remove(); return; }
-  el.innerHTML = '<div class="side-h">// git log --oneline</div>' + cs.map(c =>
-    `<div class="gl"><a href="${c.url}" target="_blank" rel="noopener">${c.sha}</a><span>${c.date}</span><span>${esc(c.msg)}</span></div>`).join('');
 }
 
 async function fetchMeta() {

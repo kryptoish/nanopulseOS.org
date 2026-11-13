@@ -134,11 +134,6 @@ em { font-style: normal; color: var(--fg); }
 .cmd.gap { margin-top: 44px; }
 .ps { color: var(--accent); margin-right: 2px; }
 
-.eof {
-  margin-top: 48px; padding-top: 14px;
-  border-top: 1px dashed var(--line);
-  color: var(--faint); font-size: 12px; letter-spacing: .2em;
-}
 
 /* ── boot ──────────────────────────────────────────────────── */
 
@@ -183,49 +178,19 @@ em { font-style: normal; color: var(--fg); }
 .lede { font-size: 22px; font-weight: 300; letter-spacing: -.01em; line-height: 1.3; margin-bottom: 12px; color: var(--fg); }
 .hero-body > .dim { max-width: 60ch; }
 
-.actions { display: flex; flex-direction: column; gap: 8px; margin-top: 26px; max-width: 520px; }
-.act {
-  display: grid; grid-template-columns: 22px 1fr auto; align-items: center; gap: 10px;
-  padding: 9px 14px;
-  border: 1px solid var(--line);
-  background: var(--surface);
-  color: var(--fg); text-decoration: none; text-align: left;
-  transition: border-color .12s, background .12s, color .12s;
-}
-.act:hover, .act:focus-visible { border-color: var(--accent-line); background: var(--accent-soft); color: var(--fg); outline: none; }
-.act:hover .act-label { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--accent); }
-.act-key { color: var(--accent); text-align: center; }
-.act-cmd { color: var(--dim); font-size: 12px; }
-.act-primary { border-color: var(--accent-line); }
-.act-primary .act-key { animation: beat 2.4s ease-in-out infinite; }
-.act-inline { display: inline-grid; min-width: min(360px, 100%); }
-@keyframes beat { 0%, 70%, 100% { opacity: 1; } 78% { opacity: .35; } 86% { opacity: 1; } 92% { opacity: .55; } }
-
-.bin-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border: 1px solid var(--line); }
-.bin { padding: 14px 16px 16px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); transition: background .12s; }
-.bin:nth-child(3n) { border-right: 0; }
-.bin:nth-last-child(-n + 3) { border-bottom: 0; }
-.bin:hover { background: var(--surface); }
-.bin-name { color: var(--accent); margin-bottom: 4px; }
-.bin-name::before { content: '/bin/'; color: var(--faint); }
-.bin-desc { color: var(--dim); font-size: 12.5px; line-height: 1.55; }
-.bin-desc code { font-size: 11.5px; padding: 0 3px; }
-.bin.wip .bin-name { color: var(--dim); }
-.tag { font-size: 10.5px; color: var(--dim); border: 1px solid var(--line); padding: 0 5px; margin-left: 4px; vertical-align: 1px; letter-spacing: .04em; }
+.links { display: flex; flex-wrap: wrap; gap: 6px 28px; margin-top: 22px; }
+.links a { color: var(--fg); text-decoration: none; }
+.links a::before { content: '> '; color: var(--accent); }
+.links a:hover { color: var(--accent); }
 
 .kv { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 3px 18px; }
 .kv dt { color: var(--dim); }
 .kv dd { color: var(--fg); }
-.kv-tight { grid-template-columns: max-content minmax(0, 1fr); gap: 2px 16px; font-size: 13px; }
-.kv-wide { grid-template-columns: 150px minmax(0, 1fr); gap: 8px 18px; }
-.kv-wide dd { color: var(--dim); }
 .kv-man { grid-template-columns: 200px minmax(0, 1fr); gap: 3px 18px; padding-left: 4ch; }
 .kv-man dt { color: var(--fg); }
 .kv-man dd { color: var(--dim); }
 
 /* ── run / emulator ────────────────────────────────────────── */
-
-.emu-layout { display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: 28px; align-items: start; }
 
 .emu { border: 1px solid var(--line); background: var(--surface); }
 .emu-bar, .emu-foot {
@@ -280,38 +245,15 @@ em { font-style: normal; color: var(--fg); }
 
 .emu-idle {
   position: absolute; inset: 0;
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
-  background: radial-gradient(ellipse at center, color-mix(in oklab, var(--accent) 7%, #000) 0%, #000 70%);
-  color: #e8e4d9;
-  transition: opacity .25s;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  background: #000; color: #e8e4d9;
 }
-.emu-idle::before, .emu-idle::after {
-  content: ''; position: absolute; width: 18px; height: 18px; border: 1px solid #3a3a37;
-}
-.emu-idle::before { top: 16px; left: 16px; border-right: 0; border-bottom: 0; }
-.emu-idle::after { bottom: 16px; right: 16px; border-left: 0; border-top: 0; }
-.emu-idle .dim { color: #8b887f; }
-.emu-idle kbd { color: #e8e4d9; border-color: #3a3a37; }
-.idle-glyph {
-  width: 54px; height: 54px; display: grid; place-items: center;
-  border: 1px solid var(--accent-line); color: var(--accent);
-  font-size: 18px; padding-left: 3px; margin-bottom: 6px;
-  transition: background .15s, transform .15s;
-}
-.emu-idle:hover .idle-glyph, .emu-idle:focus-visible .idle-glyph { background: color-mix(in oklab, var(--accent) 18%, #000); transform: scale(1.04); }
+.emu-idle:hover > span:first-child { color: var(--accent); }
 .emu-idle:focus-visible { outline: none; }
-.emu-idle.loading .idle-glyph { animation: blink .6s steps(2) infinite; }
-.emu-idle.gone { opacity: 0; pointer-events: none; }
-
-.emu-side { font-size: 13px; }
-.side-h { color: var(--dim); margin: 0 0 8px; }
-.emu-side .side-h ~ .side-h, .about .side-h { margin-top: 24px; }
-.steps-mini { list-style: none; counter-reset: s; display: grid; gap: 5px; }
-.steps-mini li { counter-increment: s; position: relative; padding-left: 26px; color: var(--dim); }
-.steps-mini li::before { content: counter(s, decimal-leading-zero); color: var(--faint); position: absolute; left: 0; }
-.emu-side .kv dt { color: var(--accent); }
-.emu-side .kv dd { color: var(--dim); }
-.emu-side p { margin-top: 18px; }
+.emu-idle:focus-visible > span:first-child { text-decoration: underline; }
+.emu-idle .dim { color: #8b887f; }
+.emu-idle.loading > span:first-child { animation: blink .6s steps(2) infinite; }
+.emu-idle.gone { display: none; }
 
 /* ── install ───────────────────────────────────────────────── */
 
@@ -321,11 +263,7 @@ em { font-style: normal; color: var(--fg); }
 .steps > li > :not(.step-h) { margin-left: 34px; }
 .steps > li > * + * { margin-top: 10px; }
 
-.ticks { list-style: none; display: grid; gap: 4px; }
-.ticks li { position: relative; padding-left: 20px; color: var(--dim); }
-.ticks li::before { content: '–'; color: var(--faint); position: absolute; left: 0; }
 
-.row { display: flex; flex-wrap: wrap; gap: 10px; }
 
 .code {
   display: flex; align-items: center; gap: 12px;
@@ -334,19 +272,12 @@ em { font-style: normal; color: var(--fg); }
   max-width: 720px;
 }
 .code + .code { margin-top: 6px !important; }
+.steps .code + p { margin-top: 18px !important; }
 .code code { background: none; border: 0; padding: 0; flex: 1; min-width: 0; overflow-x: auto; white-space: pre; scrollbar-width: none; font-size: 13px; }
 .code code::before { content: '$ '; color: var(--accent); }
 .copy { font-size: 11.5px; color: var(--dim); padding: 0 6px; border: 1px solid var(--line); flex: none; transition: color .12s, border-color .12s; }
 .copy:hover { color: var(--fg); border-color: var(--faint); }
 .copy.done { color: var(--accent); border-color: var(--accent-line); }
-
-.tabs { display: flex; gap: 0; border-bottom: 1px solid var(--line); max-width: 720px; }
-.tab { padding: 4px 14px 5px; color: var(--dim); border-bottom: 1px solid transparent; margin-bottom: -1px; }
-.tab:hover { color: var(--fg); }
-.tab[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
-.tab-pane { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; padding-top: 6px; max-width: 720px; }
-.tab-pane[hidden] { display: none; }
-.tab-pane .kv { margin: 6px 0; }
 
 /* ── man ───────────────────────────────────────────────────── */
 
@@ -355,17 +286,6 @@ em { font-style: normal; color: var(--fg); }
 .man-body { padding-left: 4ch; color: var(--dim); max-width: calc(72ch + 4ch); }
 .man-body p + .code, .man-body .code + .code { margin-top: 8px; }
 .man-body p { margin-bottom: 4px; }
-
-/* ── about ─────────────────────────────────────────────────── */
-
-.goals { list-style: none; counter-reset: g; display: grid; gap: 3px; }
-.goals li { counter-increment: g; position: relative; padding-left: 34px; }
-.goals li::before { content: counter(g, decimal-leading-zero); color: var(--accent); font-size: 12px; position: absolute; left: 0; top: 1px; }
-.about .row { margin-top: 12px; }
-.gitlog { margin-top: 20px; font-size: 12.5px; }
-.gitlog .gl { display: grid; grid-template-columns: 70px 92px minmax(0, 1fr); gap: 12px; color: var(--dim); }
-.gitlog .gl a { color: var(--accent); text-decoration: none; }
-.gitlog .gl span:last-child { color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* ── shell response ────────────────────────────────────────── */
 
@@ -449,20 +369,6 @@ em { font-style: normal; color: var(--fg); }
 
 /* ── responsive ────────────────────────────────────────────── */
 
-@media (max-width: 920px) {
-  .emu-layout { grid-template-columns: 1fr; }
-  .emu-side { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; }
-  .emu-side .side-h ~ .side-h { margin-top: 0; }
-  .emu-side .side-h:nth-of-type(2) { grid-column: 2; grid-row: 1; }
-  .emu-side .kv { grid-column: 2; grid-row: 2; }
-  .emu-side p { grid-column: 1 / -1; }
-  .bin-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .bin:nth-child(3n) { border-right: 1px solid var(--line); }
-  .bin:nth-child(2n) { border-right: 0; }
-  .bin:nth-last-child(-n + 3) { border-bottom: 1px solid var(--line); }
-  .bin:nth-last-child(-n + 2) { border-bottom: 0; }
-}
-
 @media (max-width: 680px) {
   :root { --gutter: 16px; --fs: 13.5px; }
   #app { padding-top: 12px; }
@@ -471,22 +377,11 @@ em { font-style: normal; color: var(--fg); }
   .hero { grid-template-columns: 1fr; gap: 20px; }
   .molecule { display: none; }
   .lede { font-size: 19px; }
-  .act { grid-template-columns: 18px 1fr; }
-  .act-cmd { display: none; }
-  .bin-grid { grid-template-columns: 1fr; }
-  .bin { border-right: 0 !important; border-bottom: 1px solid var(--line) !important; }
-  .bin:last-child { border-bottom: 0 !important; }
-  .kv, .kv-wide, .kv-man { grid-template-columns: 1fr; gap: 0; padding-left: 0; }
-  .kv dd { margin-bottom: 8px; }
-  .kv-tight { grid-template-columns: max-content 1fr; gap: 2px 14px; }
-  .kv-tight dd { margin-bottom: 0; }
-  .emu-side { display: block; }
-  .emu-side .side-h ~ .side-h { margin-top: 20px; }
+  .kv-man { grid-template-columns: 1fr; gap: 0; padding-left: 0; }
+  .kv-man dd { margin-bottom: 8px; }
   .steps > li > :not(.step-h) { margin-left: 0; }
   .man-body { padding-left: 0; }
   .ps-host { display: none; }
-  .gitlog .gl { grid-template-columns: 64px minmax(0, 1fr); }
-  .gitlog .gl span:nth-child(2) { display: none; }
   .nf { grid-template-columns: 1fr; }
   .nf pre { display: none; }
   .emu-ctl .ctl { padding: 1px 4px; }
